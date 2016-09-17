@@ -50,7 +50,8 @@ EOF;
         $result=$command->queryAll();
         return $result;
     }
-    public function today($today,$yesterday){
+    public function today_pv($today){
+        $yesterday=date("Y-m-d",strtotime("-1 day",strtotime($today)));
         $connection=\yii::$app->db;
         $sql=<<<EOF
         select * from pv where logtime like '$today%' order by logtime ASC
@@ -59,6 +60,23 @@ EOF;
         $result=$command->queryAll();
         $sql1=<<<EOF
         select * from pv where logtime like '$yesterday%' order by logtime ASC
+EOF;
+        $command1 = $connection->createCommand($sql1);
+        $result1=$command1->queryAll();
+        $result2=array_merge($result,$result1);
+        return $result2;
+
+    }
+    public function today_uv($today){
+        $yesterday=date("Y-m-d",strtotime("-1 day",strtotime($today)));
+        $connection=\yii::$app->db;
+        $sql=<<<EOF
+        select distinct * from uv where logtime like '$today%' order by logtime ASC
+EOF;
+        $command = $connection->createCommand($sql);
+        $result=$command->queryAll();
+        $sql1=<<<EOF
+        select distinct * from uv where logtime like '$yesterday%' order by logtime ASC
 EOF;
         $command1 = $connection->createCommand($sql1);
         $result1=$command1->queryAll();

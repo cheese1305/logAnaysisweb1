@@ -156,11 +156,12 @@ class SiteController extends Controller
     public function actionToday(){
         $model=new SiteModel();
         $today=$_POST['today'];
-        $yesterday=$_POST['yesterday'];
-        $result=$model->today($today,$yesterday);
-        /*for($i=0;$i<count($result);$i++){
-            $result[$i]['logtime']=substr($$result[$i]['logtime'],11);
-        }*/
+        $type=$_POST['select_type'];
+        if($type=='pv'){
+            $result=$model->today_pv($today);
+        }else{
+            $result=$model->today_uv($today);
+        }
 
         echo json_encode($result,JSON_UNESCAPED_UNICODE);
     }
